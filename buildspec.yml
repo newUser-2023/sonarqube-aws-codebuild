@@ -5,6 +5,8 @@ env:
     HOST: local/sonar:HOST
     Organization: local/sonar:Organization
     Project: local/sonar:Project
+    secrets-manager:
+        SECRET_VALUE: "arn:aws:secretsmanager:us-east-2:354302240769:secret:prod/sonar-HMCuMZ"
 phases:
   install:
     commands:
@@ -25,6 +27,7 @@ phases:
   build:
     commands:
       - echo "Build phase ..."
+      - echo $SECRET_VALUE
       - sonar-scanner -Dsonar.login=$LOGIN -Dsonar.host.url=$HOST -Dsonar.projectKey=$Project -Dsonar.organization=$Organization
       - sleep 5
       - curl https://sonarcloud.io/api/qualitygates/project_status?projectKey=$Project >result.json
